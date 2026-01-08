@@ -1,0 +1,13 @@
+.layout {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+}
+
+.header {
+  
+}
+
+.main {
+  height: 100%;
+}
