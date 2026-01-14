@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router";
 import Layout from "../Layout";
 import SheetJSDemo from "../SheetJSDemo";
 import Univer from "../Univer";
+import EditorPage from "../pages/EditorPage";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
       {
         path: "univer",
         element: <Univer />,
+      },
+      {
+        path: "editor",
+        element: <EditorPage />,
       }
     ],
   }
