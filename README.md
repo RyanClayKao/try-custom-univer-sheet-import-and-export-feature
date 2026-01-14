@@ -20,3 +20,18 @@
   - 做單欄式排版
   - 將兩個套件的範例程式碼都貼上來，嘗試跑起來
 ### (待續...)
+
+## 開發流程 (Development Workflow)
+
+本專案使用 **Spec-Kit** 進行規格驅動開發 (Spec-Driven Development)。
+
+### 主要步驟：
+1. **`/speckit.specify`**: 定義新功能規格，建立 `00x-feature-name` 分支。
+2. **`/speckit.plan`**: 制定技術實作計畫。
+3. **`/speckit.tasks`**: 將計畫拆解為可執行的任務。
+4. **`/speckit.implement`**: 依序執行任務並完成開發。
+
+### 規格文件管理：
+- 所有規格與計畫檔案均存放於 `specs/` 目錄下。
+- 分支合併至 `master` 後，對應的 `specs/00x-...` 目錄會被保留作為**歷史紀錄**。
+- 新功能的編號會根據 `specs/` 中最高的序號自動遞增。
