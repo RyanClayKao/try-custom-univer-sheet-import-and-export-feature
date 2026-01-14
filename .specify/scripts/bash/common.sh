@@ -65,11 +65,21 @@ has_git() {
 check_feature_branch() {
     local branch="$1"
     local has_git_repo="$2"
+    local allow_main="${3:-false}"
 
     # For non-git repos, we can't enforce branch naming but still provide output
     if [[ "$has_git_repo" != "true" ]]; then
         echo "[specify] Warning: Git repository not detected; skipped branch validation" >&2
         return 0
+    fi
+
+    if [[ "$branch" == "master" || "$branch" == "main" ]]; then
+        if [[ "$allow_main" == "true" ]]; then
+            return 0
+        fi
+        echo "ERROR: Not on a feature branch. Current branch: $branch" >&2
+        echo "Feature branches should be named like: 001-feature-name" >&2
+        return 1
     fi
 
     if [[ ! "$branch" =~ ^[0-9]{3}- ]]; then
