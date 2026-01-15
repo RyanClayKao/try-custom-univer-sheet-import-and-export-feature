@@ -30,6 +30,67 @@ describe('excelParser', () => {
       expect(sheet.cellData['1']['0'].v).toBe('John');
       expect(sheet.cellData['1']['1'].v).toBe(30);
     });
+
+    it('should use formatted strings for date and time cells', () => {
+      const mockWorkbook = {
+        SheetNames: ['Sheet1'],
+        Sheets: {
+          'Sheet1': {
+            '!ref': 'A1:B1',
+            'A1': { v: 45869, t: 'n', z: 'yyyy/mm/dd', w: '2025/07/31' },
+            'B1': { v: 0.7645833333333333, t: 'n', z: 'HH:mm', w: '18:21' }
+          }
+        }
+      };
+
+      const result = transformWorkbookToUniverData(mockWorkbook);
+      const sheet = Object.values(result.sheets)[0];
+
+      expect(sheet.cellData['0']['0'].v).toBe('2025/07/31');
+      expect(sheet.cellData['0']['0'].z).toBe('yyyy/mm/dd');
+      expect(sheet.cellData['0']['0'].t).toBe('s');
+      
+      expect(sheet.cellData['0']['1'].v).toBe('18:21');
+      expect(sheet.cellData['0']['1'].z).toBe('HH:mm');
+      expect(sheet.cellData['0']['1'].t).toBe('s');
+    });
+
+    it('should format dates as yyyy/mm/dd', () => {
+      const date = new Date(2025, 6, 12); // July 12, 2025
+      const mockWorkbook = {
+        SheetNames: ['Sheet1'],
+        Sheets: {
+          'Sheet1': {
+            '!ref': 'A1:A1',
+            'A1': { v: date, t: 'd', z: 'm/d/yy' }
+          }
+        }
+      };
+
+      const result = transformWorkbookToUniverData(mockWorkbook);
+      const sheet = Object.values(result.sheets)[0];
+
+      expect(sheet.cellData['0']['0'].v).toBe('2025/07/12');
+      expect(sheet.cellData['0']['0'].t).toBe('s');
+    });
+
+    it('should format times as hh:mm', () => {
+      const mockWorkbook = {
+        SheetNames: ['Sheet1'],
+        Sheets: {
+          'Sheet1': {
+            '!ref': 'A1:A1',
+            'A1': { v: 0.5625, t: 'n', z: 'h:mm AM/PM' } // 13:30
+          }
+        }
+      };
+
+      const result = transformWorkbookToUniverData(mockWorkbook);
+      const sheet = Object.values(result.sheets)[0];
+
+      expect(sheet.cellData['0']['0'].v).toBe('13:30');
+      expect(sheet.cellData['0']['0'].t).toBe('s');
+    });
   });
 
   describe('transformUniverDataToWorkbook', () => {
